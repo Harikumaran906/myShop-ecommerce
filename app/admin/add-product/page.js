@@ -26,7 +26,7 @@ export default function AddProductPage() {
   }
 
   async function saveProduct() {
-    await fetch("http://localhost:3000/api/products", {
+    await fetch("/api/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

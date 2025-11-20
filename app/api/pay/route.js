@@ -18,8 +18,9 @@ export async function POST(request) {
       },
       quantity: item.quantity,
     })),
-    success_url: "http://localhost:3000/",
-    cancel_url: "http://localhost:3000/checkout",
+    success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout`,
+
   });
 
   return NextResponse.json({ url: session.url });

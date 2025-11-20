@@ -16,7 +16,7 @@ export default function CheckoutPage() {
 
       if (!user) return;
 
-      const res = await fetch("http://localhost:3000/api/cart/get", {
+      const res = await fetch("/api/cart/get", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: user.username }),
@@ -29,7 +29,7 @@ export default function CheckoutPage() {
       const details = {};
       for (const item of data.cart) {
         const pRes = await fetch(
-          `http://localhost:3000/api/products/${item.productId}`
+          `/api/products/${item.productId}`
         );
         const product = await pRes.json();
         details[item.productId] = product;
@@ -68,14 +68,14 @@ export default function CheckoutPage() {
       username: user.username,
     };
 
-    const res = await fetch("http://localhost:3000/api/orders", {
+    const res = await fetch("/api/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(order),
     });
 
     await res.json();
-    await fetch("http://localhost:3000/api/cart/clear", {
+    await fetch("/api/cart/clear", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: user.username }),
@@ -85,7 +85,7 @@ export default function CheckoutPage() {
   }
 
   async function payWithStripe() {
-    const res = await fetch("http://localhost:3000/api/pay", {
+    const res = await fetch("/api/pay", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

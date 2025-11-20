@@ -20,8 +20,8 @@ export default function AdminPage() {
   }, []);
 
   async function loadData() {
-    const resP = await fetch("http://localhost:3000/api/products");
-    const resO = await fetch("http://localhost:3000/api/orders");
+    const resP = await fetch("/api/products");
+    const resO = await fetch("/api/orders");
 
     setProducts(await resP.json());
     setOrders(await resO.json());
@@ -48,7 +48,6 @@ export default function AdminPage() {
           <h3>{p.title}</h3>
           <p>${p.price}</p>
 
-          {/* 🔥 REAL MONGODB ID SHOWN HERE */}
           <p style={{ fontSize: "12px", color: "gray" }}>
             ID: {p._id}
           </p>

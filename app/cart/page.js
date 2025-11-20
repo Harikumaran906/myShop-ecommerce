@@ -14,7 +14,7 @@ export default function CartPage() {
         return;
       }
 
-      const res = await fetch("http://localhost:3000/api/cart/get", {
+      const res = await fetch("/api/cart/get", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: user.username }),
@@ -27,7 +27,7 @@ export default function CartPage() {
 
       for (const item of data.cart) {
         const pRes = await fetch(
-          `http://localhost:3000/api/products/${item.productId}`
+          `/api/products/${item.productId}`
         );
         const product = await pRes.json();
         details[item.productId] = product;
@@ -43,7 +43,7 @@ export default function CartPage() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return;
 
-    const res = await fetch("http://localhost:3000/api/cart/remove", {
+    const res = await fetch("/api/cart/remove", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

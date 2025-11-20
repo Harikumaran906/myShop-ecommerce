@@ -25,7 +25,7 @@ export default function EditProductPage({ params }) {
 
   async function loadProduct() {
     const res = await fetch(
-      `http://localhost:3000/api/products/${params.id}`
+      `/api/products/${params.id}`
     );
     const data = await res.json();
 
@@ -43,7 +43,7 @@ export default function EditProductPage({ params }) {
   }
 
   async function updateProduct() {
-    await fetch(`http://localhost:3000/api/products/${params.id}`, {
+    await fetch(`/api/products/${params.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

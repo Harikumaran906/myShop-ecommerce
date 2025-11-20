@@ -16,7 +16,7 @@ export default function ProductPage() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`http://localhost:3000/api/products/${id}`)
+    fetch(`/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data));
   }, [id]);
@@ -33,7 +33,7 @@ export default function ProductPage() {
       return;
     }
 
-    const res = await fetch("http://localhost:3000/api/cart/add", {
+    const res = await fetch("/api/cart/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

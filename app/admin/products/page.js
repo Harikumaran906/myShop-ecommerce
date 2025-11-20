@@ -17,13 +17,13 @@ export default function AdminProductsPage() {
   }, []);
 
   async function loadProducts() {
-    const res = await fetch("http://localhost:3000/api/products");
+    const res = await fetch("/api/products");
     const data = await res.json();
     setProducts(data);
   }
 
   async function deleteProduct(id) {
-    await fetch(`http://localhost:3000/api/products/${id}`, {
+    await fetch(`/api/products/${id}`, {
       method: "DELETE",
     });
     loadProducts();
