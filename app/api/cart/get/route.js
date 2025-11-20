@@ -20,9 +20,15 @@ export async function POST(request) {
 
   const { username } = await request.json();
 
+  if (!username) {
+    return Response.json({ cart: [] }, { status: 400 });
+  }
+
   const user = await User.findOne({ username });
 
-  if (!user) return Response.json({ cart: [] });
+  if (!user) {
+    return Response.json({ cart: [] }, { status: 404 });
+  }
 
   return Response.json({ cart: user.cart });
 }

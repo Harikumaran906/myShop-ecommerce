@@ -1,33 +1,36 @@
 import { connectDB } from "../../../../lib/db";
 import { Product } from "../../../../lib/productModel";
 
-export async function GET(request, context) {
+export async function GET(request, { params }) {
   await connectDB();
 
-  const { id } = await context.params;
+  const product = await Product.findById(params.id);
 
-  const product = await Product.findById(id);
-
-  return Response.json(product);
+  return new Response(JSON.stringify(product), {
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
-export async function PUT(request, context) {
+export async function PUT(request, { params }) {
   await connectDB();
 
-  const { id } = await context.params;
   const body = await request.json();
 
-  const updated = await Product.findByIdAndUpdate(id, body, { new: true });
+  const updated = await Product.findByIdAndUpdate(params.id, body, {
+    new: true,
+  });
 
-  return Response.json(updated);
+  return new Response(JSON.stringify(updated), {
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
-export async function DELETE(request, context) {
+export async function DELETE(request, { params }) {
   await connectDB();
 
-  const { id } = await context.params;
+  await Product.findByIdAndDelete(params.id);
 
-  await Product.findByIdAndDelete(id);
-
-  return Response.json({ message: "Product deleted" });
+  return new Response(JSON.stringify({ message: "Product deleted" }), {
+    headers: { "Content-Type": "application/json" },
+  });
 }

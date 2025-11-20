@@ -20,9 +20,15 @@ export async function POST(request) {
 
   const { username, productId } = await request.json();
 
+  if (!username || !productId) {
+    return Response.json({ message: "Invalid request" }, { status: 400 });
+  }
+
   const user = await User.findOne({ username });
 
-  if (!user) return Response.json({ message: "User not found" });
+  if (!user) {
+    return Response.json({ message: "User not found" }, { status: 404 });
+  }
 
   const existing = user.cart.find((item) => item.productId === productId);
 
@@ -34,5 +40,8 @@ export async function POST(request) {
 
   await user.save();
 
-  return Response.json({ message: "Added to cart", cart: user.cart });
+  return Response.json({
+    message: "Added to cart",
+    cart: user.cart,
+  });
 }
