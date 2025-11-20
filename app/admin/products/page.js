@@ -17,15 +17,22 @@ export default function AdminProductsPage() {
   }, []);
 
   async function loadProducts() {
-    const res = await fetch("/api/products");
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    const res = await fetch(`${baseUrl}/api/products`);
     const data = await res.json();
     setProducts(data);
   }
 
   async function deleteProduct(id) {
-    await fetch(`/api/products/${id}`, {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    await fetch(`${baseUrl}/api/products/${id}`, {
       method: "DELETE",
     });
+
     loadProducts();
   }
 

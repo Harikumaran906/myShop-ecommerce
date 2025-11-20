@@ -10,13 +10,16 @@ export default function CheckoutPage() {
     address: "",
   });
 
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
   useEffect(() => {
     async function loadCart() {
       const user = JSON.parse(localStorage.getItem("user"));
 
       if (!user) return;
 
-      const res = await fetch("/api/cart/get", {
+      const res = await fetch(`${baseUrl}/api/cart/get`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: user.username }),
@@ -25,12 +28,9 @@ export default function CheckoutPage() {
       const data = await res.json();
       setCart(data.cart || []);
 
-      // Fetch product details
       const details = {};
       for (const item of data.cart) {
-        const pRes = await fetch(
-          `/api/products/${item.productId}`
-        );
+        const pRes = await fetch(`${baseUrl}/api/products/${item.productId}`);
         const product = await pRes.json();
         details[item.productId] = product;
       }
@@ -38,7 +38,7 @@ export default function CheckoutPage() {
     }
 
     loadCart();
-  }, []);
+  }, [baseUrl]);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -68,14 +68,15 @@ export default function CheckoutPage() {
       username: user.username,
     };
 
-    const res = await fetch("/api/orders", {
+    const res = await fetch(`${baseUrl}/api/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(order),
     });
 
     await res.json();
-    await fetch("/api/cart/clear", {
+
+    await fetch(`${baseUrl}/api/cart/clear`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: user.username }),
@@ -85,7 +86,7 @@ export default function CheckoutPage() {
   }
 
   async function payWithStripe() {
-    const res = await fetch("/api/pay", {
+    const res = await fetch(`${baseUrl}/api/pay`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

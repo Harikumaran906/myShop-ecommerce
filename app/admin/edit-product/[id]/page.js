@@ -24,9 +24,10 @@ export default function EditProductPage({ params }) {
   }, []);
 
   async function loadProduct() {
-    const res = await fetch(
-      `/api/products/${params.id}`
-    );
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    const res = await fetch(`${baseUrl}/api/products/${params.id}`);
     const data = await res.json();
 
     setForm({
@@ -43,7 +44,10 @@ export default function EditProductPage({ params }) {
   }
 
   async function updateProduct() {
-    await fetch(`/api/products/${params.id}`, {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    await fetch(`${baseUrl}/api/products/${params.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

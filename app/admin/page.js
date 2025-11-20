@@ -20,8 +20,11 @@ export default function AdminPage() {
   }, []);
 
   async function loadData() {
-    const resP = await fetch("/api/products");
-    const resO = await fetch("/api/orders");
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    const resP = await fetch(`${baseUrl}/api/products`);
+    const resO = await fetch(`${baseUrl}/api/orders`);
 
     setProducts(await resP.json());
     setOrders(await resO.json());

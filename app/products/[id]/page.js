@@ -16,7 +16,10 @@ export default function ProductPage() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`/api/products/${id}`)
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    fetch(`${baseUrl}/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data));
   }, [id]);
@@ -33,7 +36,10 @@ export default function ProductPage() {
       return;
     }
 
-    const res = await fetch("/api/cart/add", {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    const res = await fetch(`${baseUrl}/api/cart/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -45,7 +51,6 @@ export default function ProductPage() {
     const data = await res.json();
     alert("Added to cart!");
   }
-
 
   return (
     <main className="container mt-4">

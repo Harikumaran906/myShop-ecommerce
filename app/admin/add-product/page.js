@@ -26,7 +26,10 @@ export default function AddProductPage() {
   }
 
   async function saveProduct() {
-    await fetch("/api/products", {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    await fetch(`${baseUrl}/api/products`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
