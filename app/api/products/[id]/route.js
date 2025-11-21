@@ -1,36 +1,24 @@
+export const dynamic = "force-dynamic";
+
 import { connectDB } from "../../../../lib/db";
 import { Product } from "../../../../lib/productModel";
 
-export async function GET(request, { params }) {
+export async function GET(_, { params }) {
   await connectDB();
-
   const product = await Product.findById(params.id);
-
-  return new Response(JSON.stringify(product), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return Response.json(product);
 }
 
 export async function PUT(request, { params }) {
   await connectDB();
-
   const body = await request.json();
+  const updated = await Product.findByIdAndUpdate(params.id, body, { new: true });
 
-  const updated = await Product.findByIdAndUpdate(params.id, body, {
-    new: true,
-  });
-
-  return new Response(JSON.stringify(updated), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return Response.json(updated);
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(_, { params }) {
   await connectDB();
-
   await Product.findByIdAndDelete(params.id);
-
-  return new Response(JSON.stringify({ message: "Product deleted" }), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return Response.json({ message: "Product deleted" });
 }

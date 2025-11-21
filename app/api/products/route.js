@@ -1,12 +1,12 @@
+export const dynamic = "force-dynamic";
+
 import { connectDB } from "../../../lib/db";
 import { Product } from "../../../lib/productModel";
 
-export async function GET(request) {
+export async function GET() {
   await connectDB();
   const products = await Product.find();
-  return new Response(JSON.stringify(products), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return Response.json(products);
 }
 
 export async function POST(request) {
@@ -15,10 +15,5 @@ export async function POST(request) {
   const newProduct = new Product(body);
   await newProduct.save();
 
-  return new Response(
-    JSON.stringify({ message: "Product added", product: newProduct }),
-    {
-      headers: { "Content-Type": "application/json" },
-    }
-  );
+  return Response.json({ message: "Product added", product: newProduct });
 }
