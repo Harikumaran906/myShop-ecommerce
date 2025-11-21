@@ -20,11 +20,8 @@ export default function AdminPage() {
   }, []);
 
   async function loadData() {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
-    const resP = await fetch(`${baseUrl}/api/products`);
-    const resO = await fetch(`${baseUrl}/api/orders`);
+    const resP = await fetch("/api/products");
+    const resO = await fetch("/api/orders");
 
     setProducts(await resP.json());
     setOrders(await resO.json());
@@ -43,6 +40,14 @@ export default function AdminPage() {
     <main className="container mt-4">
       <h1>Admin Dashboard</h1>
 
+      <a href="/admin/add-product" className="btn btn-success mt-3 me-3">
+        Add Product
+      </a>
+
+      <a href="/admin/products" className="btn btn-primary mt-3">
+        Manage Products
+      </a>
+
       <h2 className="mt-4">Products</h2>
       {products.length === 0 && <p>No products found</p>}
 
@@ -50,7 +55,6 @@ export default function AdminPage() {
         <div key={p._id} className="product-card mb-2">
           <h3>{p.title}</h3>
           <p>${p.price}</p>
-
           <p style={{ fontSize: "12px", color: "gray" }}>
             ID: {p._id}
           </p>
