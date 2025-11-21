@@ -1,17 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function ProductPage() {
+export default function ProductPage({ params }) {
+  const { id } = params;
   const [product, setProduct] = useState(null);
-  const [id, setId] = useState(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const parts = window.location.pathname.split("/");
-      const foundId = parts[parts.length - 1];
-      setId(foundId);
-    }
-  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -24,22 +16,16 @@ export default function ProductPage() {
       .then((data) => setProduct(data));
   }, [id]);
 
-  if (!product) {
-    return <p>Loading...</p>;
-  }
+  if (!product) return <p>Loading...</p>;
 
   async function addToCart() {
     const user = JSON.parse(localStorage.getItem("user"));
-
-    if (!user) {
-      alert("Please log in first.");
-      return;
-    }
+    if (!user) return alert("Please log in first.");
 
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const res = await fetch(`${baseUrl}/api/cart/add`, {
+    await fetch(`${baseUrl}/api/cart/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -48,7 +34,6 @@ export default function ProductPage() {
       }),
     });
 
-    const data = await res.json();
     alert("Added to cart!");
   }
 
