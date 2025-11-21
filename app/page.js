@@ -1,15 +1,19 @@
-import { connectDB } from "../lib/db";
-import { Product } from "../lib/productModel";
+async function getProducts() {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const res = await fetch(`${baseUrl}/api/products`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    return [];
+  }
+
+  return res.json();
+}
 
 export default async function HomePage() {
-  await connectDB();
-
-  const docs = await Product.find().lean();
-
-  const products = docs.map((p) => ({
-    ...p,
-    _id: p._id.toString(),
-  }));
+  const products = await getProducts();
 
   return (
     <main className="container mt-4">
@@ -23,10 +27,7 @@ export default async function HomePage() {
               <h3>{p.title}</h3>
               <p>Price: ${p.price}</p>
               <p>Category: {p.category}</p>
-              <a
-                href={`/products/${p._id}`}
-                className="btn btn-primary btn-sm"
-              >
+              <a href={`/products/${p._id}`} className="btn btn-primary btn-sm">
                 View
               </a>
             </div>
