@@ -7,7 +7,7 @@ export async function GET(request, { params }) {
   console.log("===== [ID API] PARAMS =====");
   console.log(params);
 
-  const id = params.id;
+  const id = params.pid;
 
   console.log("===== [ID API] ID RECEIVED =====");
   console.log(id);
