@@ -1,5 +1,5 @@
-import { connectDB } from "../../../../lib/db";
-import { Product } from "../../../../lib/productModel";
+import { connectDB } from "@/lib/db";
+import { Product } from "@/lib/productModel";
 import mongoose from "mongoose";
 
 export async function GET(request, { params }) {
