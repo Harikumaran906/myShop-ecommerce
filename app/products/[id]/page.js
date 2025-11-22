@@ -6,11 +6,30 @@ export default function ProductPage({ params }) {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    if (!id) return;
+    console.log("🔥 Product page mounted");
+    console.log("👉 params =", params);
+    console.log("👉 id =", id);
 
-    fetch(`/api/prod/${id}`)
-      .then((res) => res.json())
-      .then((data) => setProduct(data));
+    if (!id) {
+      console.log("⛔ No ID found! Returning...");
+      return;
+    }
+
+    const url = `/api/prod/${id}`;
+    console.log("🌐 Fetching:", url);
+
+    fetch(url)
+      .then((res) => {
+        console.log("📥 Fetch response status:", res.status);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("📦 Fetched product data:", data);
+        setProduct(data);
+      })
+      .catch((err) => {
+        console.error("💥 FETCH ERROR:", err);
+      });
   }, [id]);
 
   if (!product) return <p>Loading...</p>;
@@ -18,6 +37,8 @@ export default function ProductPage({ params }) {
   async function addToCart() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return alert("Please log in first.");
+
+    console.log("🛒 Adding to cart:", product._id);
 
     await fetch(`/api/cart/add`, {
       method: "POST",
