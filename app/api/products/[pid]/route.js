@@ -1,6 +1,8 @@
 import { connectDB } from "../../../../lib/db";
 import { Product } from "../../../../lib/productModel";
 
+console.log("===== [PID API] MODULE LOADED =====");
+
 export async function GET(request, { params }) {
   await connectDB();
 
