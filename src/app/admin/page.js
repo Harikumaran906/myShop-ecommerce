@@ -20,7 +20,7 @@ export default function AdminPage() {
   }, []);
 
   async function loadData() {
-    const resP = await fetch("/api/products");
+    const resP = await fetch("/api/prod");
     const resO = await fetch("/api/orders");
 
     setProducts(await resP.json());

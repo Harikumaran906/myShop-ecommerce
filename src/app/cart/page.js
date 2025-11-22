@@ -29,7 +29,7 @@ export default function CartPage() {
       const details = {};
 
       for (const item of data.cart) {
-        const pRes = await fetch(`${baseUrl}/api/products/${item.productId}`);
+        const pRes = await fetch(`${baseUrl}/api/prod/${item.productId}`);
         const product = await pRes.json();
         details[item.productId] = product;
       }

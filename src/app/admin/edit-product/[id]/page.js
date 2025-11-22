@@ -27,7 +27,7 @@ export default function EditProductPage({ params }) {
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const res = await fetch(`${baseUrl}/api/products/${params.id}`);
+    const res = await fetch(`${baseUrl}/api/prod/${params.id}`);
     const data = await res.json();
 
     setForm({
@@ -47,7 +47,7 @@ export default function EditProductPage({ params }) {
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    await fetch(`${baseUrl}/api/products/${params.id}`, {
+    await fetch(`${baseUrl}/api/prod/${params.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

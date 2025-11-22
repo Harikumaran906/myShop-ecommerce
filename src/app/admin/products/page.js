@@ -20,7 +20,7 @@ export default function AdminProductsPage() {
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const res = await fetch(`${baseUrl}/api/products`);
+    const res = await fetch(`${baseUrl}/api/prod`);
     const data = await res.json();
     setProducts(data);
   }
@@ -29,7 +29,7 @@ export default function AdminProductsPage() {
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    await fetch(`${baseUrl}/api/products/${id}`, {
+    await fetch(`${baseUrl}/api/prod/${id}`, {
       method: "DELETE",
     });
 

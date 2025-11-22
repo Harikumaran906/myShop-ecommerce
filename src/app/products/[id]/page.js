@@ -11,7 +11,7 @@ export default function ProductPage({ params }) {
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    fetch(`${baseUrl}/api/products/${id}`)
+    fetch(`${baseUrl}/api/prod/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data));
   }, [id]);
