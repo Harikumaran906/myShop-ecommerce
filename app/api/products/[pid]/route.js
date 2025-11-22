@@ -1,33 +1,20 @@
 import { connectDB } from "../../../../lib/db";
 import { Product } from "../../../../lib/productModel";
 
-console.log("===== [PID API] MODULE LOADED =====");
+console.log("PID LOADED...");
 
 export async function GET(request, { params }) {
   await connectDB();
 
-  console.log("===== [ID API] PARAMS =====");
-  console.log(params);
-
   const id = params.pid;
 
-  console.log("===== [ID API] ID RECEIVED =====");
-  console.log(id);
+  const allProducts = await Product.find();
 
-  try {
-    const found1 = await Product.findById(id);
-    console.log("===== [ID API] findById result =====");
-    console.log(found1);
-  } catch (e) {
-    console.log("===== [ID API] findById ERROR =====");
-    console.log(e);
-  }
+  const product = allProducts.find((p) => {
+    return p._id && p._id.toString() === id;
+  });
 
-  const product = await Product.findOne({ _id: id });
-  console.log("===== [ID API] findOne result =====");
-  console.log(product);
-
-  return new Response(JSON.stringify(product), {
+  return new Response(JSON.stringify(product || null), {
     headers: { "Content-Type": "application/json" },
   });
 }
