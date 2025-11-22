@@ -6,14 +6,15 @@ export default async function handler(req, res) {
 
   if (req.method === "GET") {
     const products = await Product.find();
-    return res.status(200).json(products);
+    return res.json(products);
   }
 
   if (req.method === "POST") {
-    const product = new Product(req.body);
-    await product.save();
-    return res.status(200).json({ message: "Product added", product });
+    const body = req.body;
+    const newProduct = new Product(body);
+    await newProduct.save();
+    return res.json(newProduct);
   }
 
-  return res.status(405).json({ error: "Method not allowed" });
+  res.status(405).json({ error: "Method not allowed" });
 }
