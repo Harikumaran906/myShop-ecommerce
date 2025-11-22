@@ -2,76 +2,70 @@ import { connectDB } from "../../../../lib/db";
 import { Product } from "../../../../lib/productModel";
 import mongoose from "mongoose";
 
-console.log("PID LOADED");
+console.log("===== [PID API] MODULE LOADED =====");
 
-export async function GET(request, { params }) {
+export async function GET(req, { params }) {
   await connectDB();
 
-  const id = params.pid;
+  console.log("===== [PID API] PARAMS =====");
+  console.log(params);
 
-  let objectId;
+  let id = params.pid;
+
+  console.log("===== [PID API] ID RECEIVED =====");
+  console.log(id);
+
   try {
-    objectId = new mongoose.Types.ObjectId(id);
+    id = new mongoose.Types.ObjectId(id);
   } catch (e) {
-    console.log("Invalid ObjectId:", id);
+    console.log("Invalid ObjectId format:", e);
     return Response.json(null);
   }
 
   try {
-    const product = await Product.findById(objectId);
-    console.log("GET PRODUCT:", product);
+    const product = await Product.findById(id);
+
+    console.log("===== [PID API] RESULT =====");
+    console.log(product);
+
     return Response.json(product);
   } catch (e) {
-    console.log("DB ERROR:", e);
+    console.log("===== [PID API] ERROR =====");
+    console.log(e);
     return Response.json(null);
   }
 }
 
-export async function PUT(request, { params }) {
+export async function PUT(req, { params }) {
   await connectDB();
 
-  const id = params.pid;
-  let objectId;
+  let id = params.pid;
 
   try {
-    objectId = new mongoose.Types.ObjectId(id);
-  } catch (e) {
-    console.log("Invalid ObjectId:", id);
-    return Response.json(null);
+    id = new mongoose.Types.ObjectId(id);
+  } catch {
+    return Response.json({ error: "Invalid ID" }, { status: 400 });
   }
 
-  const body = await request.json();
+  const body = await req.json();
 
-  try {
-    const updated = await Product.findByIdAndUpdate(objectId, body, {
-      new: true,
-    });
+  const updated = await Product.findByIdAndUpdate(id, body, { new: true });
 
-    return Response.json(updated);
-  } catch (e) {
-    console.log("UPDATE ERROR:", e);
-    return Response.json(null);
-  }
+  return Response.json(updated);
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(req, { params }) {
   await connectDB();
 
-  const id = params.pid;
-  let objectId;
+  let id = params.pid;
 
   try {
-    objectId = new mongoose.Types.ObjectId(id);
-  } catch (e) {
-    console.log("Invalid ObjectId:", id);
-    return Response.json(null);
+    id = new mongoose.Types.ObjectId(id);
+  } catch {
+    return Response.json({ error: "Invalid ID" }, { status: 400 });
   }
 
-  try {
-    await Product.findByIdAndDelete(objectId);
-    return Response.json({ message: "Product deleted" });
-  } catch (e) {
-    console.log("DELETE ERROR:", e);
-    return Response.json(null);
-  }
+  await Product.findByIdAndDelete(id);
+
+  return Response.json({ message: "Product deleted" });
 }
