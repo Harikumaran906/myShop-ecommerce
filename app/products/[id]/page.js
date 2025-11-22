@@ -1,34 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
 
-export default function ProductPage({ params }) {
-  const { id } = params;
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
+export default function ProductPage() {
+  const params = useParams();
+  const id = params?.id;
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    console.log("🔥 Product page mounted");
-    console.log("👉 params =", params);
-    console.log("👉 id =", id);
+    console.log("ProductPage useParams id:", id);
 
-    if (!id) {
-      console.log("⛔ No ID found! Returning...");
-      return;
-    }
+    if (!id) return;
 
-    const url = `/api/prod/${id}`;
-    console.log("🌐 Fetching:", url);
-
-    fetch(url)
-      .then((res) => {
-        console.log("📥 Fetch response status:", res.status);
-        return res.json();
-      })
-      .then((data) => {
-        console.log("📦 Fetched product data:", data);
-        setProduct(data);
-      })
+    fetch(`/api/prod/${id}`)
+      .then((res) => res.json())
+      .then((data) => setProduct(data))
       .catch((err) => {
-        console.error("💥 FETCH ERROR:", err);
+        console.error("Error fetching product:", err);
       });
   }, [id]);
 
@@ -37,8 +26,6 @@ export default function ProductPage({ params }) {
   async function addToCart() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return alert("Please log in first.");
-
-    console.log("🛒 Adding to cart:", product._id);
 
     await fetch(`/api/cart/add`, {
       method: "POST",
@@ -63,9 +50,15 @@ export default function ProductPage({ params }) {
         style={{ maxWidth: "300px" }}
       />
 
-      <p><strong>Price:</strong> ${product.price}</p>
-      <p><strong>Category:</strong> {product.category}</p>
-      <p><strong>Description:</strong> {product.description}</p>
+      <p>
+        <strong>Price:</strong> ${product.price}
+      </p>
+      <p>
+        <strong>Category:</strong> {product.category}
+      </p>
+      <p>
+        <strong>Description:</strong> {product.description}
+      </p>
 
       <button onClick={addToCart} className="btn btn-primary mt-3">
         Add to Cart
