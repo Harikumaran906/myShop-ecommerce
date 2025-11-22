@@ -8,10 +8,7 @@ export default function ProductPage({ params }) {
   useEffect(() => {
     if (!id) return;
 
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
-    fetch(`${baseUrl}/api/prod/${id}`)
+    fetch(`/api/prod/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data));
   }, [id]);
@@ -22,10 +19,7 @@ export default function ProductPage({ params }) {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return alert("Please log in first.");
 
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
-    await fetch(`${baseUrl}/api/cart/add`, {
+    await fetch(`/api/cart/add`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
