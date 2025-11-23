@@ -1,32 +1,39 @@
-console.log("HOME PAGE LOADED TEST LOG");
+"use client";
 
-async function getProducts() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+import { useEffect, useState } from "react";
 
-  const res = await fetch(`${baseUrl}/api/prod`, {
-    cache: "no-store",
-  });
+export default function HomePage() {
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
 
-  if (!res.ok) {
-    return [];
-  }
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const res = await fetch("/api/prod");
+        if (!res.ok) {
+          console.error("Failed to load products, status:", res.status);
+          setProducts([]);
+          return;
+        }
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("Error loading products:", err);
+        setProducts([]);
+      }
+    }
 
-  return res.json();
-}
-
-export default async function HomePage({ searchParams }) {
-  const products = await getProducts();
-
-  const search = (searchParams?.search || "").toLowerCase();
-  const category = searchParams?.category || "all";
+    loadProducts();
+  }, []);
 
   const categories = Array.from(
     new Set(products.map((p) => p.category).filter(Boolean))
   );
 
   const filteredProducts = products.filter((p) => {
-    const matchesSearch =
-      !search || p.title.toLowerCase().includes(search);
+    const s = search.toLowerCase().trim();
+    const matchesSearch = !s || p.title.toLowerCase().includes(s);
     const matchesCategory =
       category === "all" || p.category === category;
     return matchesSearch && matchesCategory;
@@ -37,21 +44,22 @@ export default async function HomePage({ searchParams }) {
       <h1 className="page-title">MyShop</h1>
       <h2 className="mb-3">Products</h2>
 
-      <form className="mb-4 row g-2" method="GET">
+      {/* Search + Category Filter */}
+      <div className="mb-4 row g-2">
         <div className="col-12 col-md-6">
           <input
-            name="search"
             className="form-control"
             placeholder="Search products..."
-            defaultValue={searchParams?.search || ""}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
         <div className="col-12 col-md-4">
           <select
-            name="category"
             className="form-select"
-            defaultValue={category}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
           >
             <option value="all">All categories</option>
             {categories.map((c) => (
@@ -61,13 +69,7 @@ export default async function HomePage({ searchParams }) {
             ))}
           </select>
         </div>
-
-        <div className="col-12 col-md-2">
-          <button type="submit" className="btn btn-secondary w-100">
-            Filter
-          </button>
-        </div>
-      </form>
+      </div>
 
       <div className="row">
         {filteredProducts.map((p) => (
